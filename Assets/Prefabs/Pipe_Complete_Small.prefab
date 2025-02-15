@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6976851751096799262}
   m_Layer: 0
   m_Name: PipeBottom_0
-  m_TagString: Untagged
+  m_TagString: Pipe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 8221770478179872897}
   m_Layer: 0
   m_Name: PipeTop_0
-  m_TagString: Untagged
+  m_TagString: Pipe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 4310569482974872516}
   m_Layer: 0
   m_Name: Pipe_Complete_Small
-  m_TagString: Untagged
+  m_TagString: Pipe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
