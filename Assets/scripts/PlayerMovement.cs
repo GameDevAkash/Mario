@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(CharacterController2D))]
 public class PlayerMovement : MonoBehaviour
@@ -26,6 +27,11 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetBool("Jump",jump);
         }
 
+        if(transform.position.y < -10)
+        {
+            //Mario should die
+        }
+
     }
 
     private void FixedUpdate()
@@ -44,19 +50,32 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Hit "+ collision.gameObject.name);
-
-        if (collision.collider.tag == "EnemyHead")
+        if(collision.collider.tag == "EnemyHead")
         {
             //Kill the enemy
-            Debug.Log("Hit enemy in head");
             Destroy(collision.gameObject);
         }
 
         else if(collision.collider.tag == "EnemyBody")
         {
-            //Kill the player/ourself
-            gameObject.SetActive(false); Debug.Log("Hit enemy in body");
+            //Kill the player
+            gameObject.SetActive(false);
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Coin")
+        {
+            //Increase the coin count
+            GetComponent<CoinWallet>().CoinsCount += 1;
+            UIHandler.Instance.CoinsCount_Text.text = GetComponent<CoinWallet>().CoinsCount.ToString();
+            collision.gameObject.SetActive(false);
+        }
+    }
+
+    void MarioDie()
+    {
+        //reload the current scence using scenemanager
     }
 }

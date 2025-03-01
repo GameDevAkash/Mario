@@ -6,9 +6,9 @@ public class Enemy : MonoBehaviour
 {
     float RightDir = 1;
     float LeftDir = -1;
-    float dir = 0;
+    [SerializeField] float dir = 0;
     [SerializeField]float Speed = 1;
-    Rigidbody2D rigidbody2;
+    [SerializeField] Rigidbody2D rigidbody2;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbody2.velocity = new Vector2(dir * Speed * Time.fixedDeltaTime, 0);
+        rigidbody2.velocity = new Vector3(dir * Speed * Time.fixedDeltaTime, 0,0);
     }
 
     public void ReverseDirection()

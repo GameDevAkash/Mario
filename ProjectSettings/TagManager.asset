@@ -7,6 +7,7 @@ TagManager:
   - Pipe
   - EnemyHead
   - EnemyBody
+  - Coin
   layers:
   - Default
   - TransparentFX
