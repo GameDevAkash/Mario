@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float horinzontalSpeed;
     public bool jump;
     [SerializeField] Animator m_animator;
+    public bool CanMove;
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!CanMove) { return; }
         horinzontalValue = Input.GetAxis("Horizontal");
         m_animator.SetFloat("Speed",Mathf.Abs(horinzontalValue));
 
@@ -38,9 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!CanMove) { return; }
         if (controller2D != null)
         {
-            controller2D.Move(horinzontalValue * horinzontalSpeed * Time.fixedDeltaTime, false, jump);
+            controller2D.Move(horinzontalValue * horinzontalSpeed * Time.fixedDeltaTime, jump);
             jump = false;
         }
     }

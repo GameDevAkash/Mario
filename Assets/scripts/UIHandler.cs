@@ -10,7 +10,8 @@ public class UIHandler : MonoBehaviour
     public static UIHandler Instance;
     public TextMeshProUGUI CoinsCount_Text;
     public Button RewindSameLevelButton;
-    public GameObject WinPanel;
+    public GameObject WinPanel, MainMenuPanel;
+    public PlayerMovement mario;
 
     private void Awake()
     {
@@ -20,6 +21,12 @@ public class UIHandler : MonoBehaviour
             Destroy(Instance);
 
         RewindSameLevelButton.onClick.AddListener(RewindSameLevel);
+    }
+
+    public void PlayGame()
+    {
+        MainMenuPanel.SetActive(false);
+        mario.CanMove = true;
     }
 
     public void RewindSameLevel()
