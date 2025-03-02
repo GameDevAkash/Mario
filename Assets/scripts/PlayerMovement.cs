@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController2D))]
 public class PlayerMovement : MonoBehaviour
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         if(transform.position.y < -10)
         {
             //Mario should die
+            MarioDie();
         }
 
     }
@@ -60,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //Kill the player
             gameObject.SetActive(false);
+            MarioDie();
         }
     }
 
@@ -72,10 +75,19 @@ public class PlayerMovement : MonoBehaviour
             UIHandler.Instance.CoinsCount_Text.text = GetComponent<CoinWallet>().CoinsCount.ToString();
             collision.gameObject.SetActive(false);
         }
+
+        if(collision.gameObject.tag == "castle")
+        {
+            //Move to next level
+            UIHandler.Instance.WinPanel.gameObject.SetActive(true);
+            this.enabled = false;
+        }
     }
 
     void MarioDie()
     {
         //reload the current scence using scenemanager
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

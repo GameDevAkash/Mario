@@ -8,6 +8,7 @@ TagManager:
   - EnemyHead
   - EnemyBody
   - Coin
+  - castle
   layers:
   - Default
   - TransparentFX
