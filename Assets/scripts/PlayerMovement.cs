@@ -9,13 +9,22 @@ public class PlayerMovement : MonoBehaviour
     float horinzontalValue;
     public float horinzontalSpeed;
     public bool jump;
-    [SerializeField] Animator m_animator;
+    [SerializeField] Animator m_animator, small_Animator, big_Animator;
     public bool CanMove;
+    public SpriteRenderer Big_Renderer;
+    public SpriteRenderer Small_Renderer;
+    public CapsuleCollider2D m_collider;
+
+    public bool Big => Big_Renderer.enabled;
+    public bool Small => Small_Renderer.enabled;
 
     private void Awake()
     {
         controller2D = GetComponent<CharacterController2D>();
-        m_animator = GetComponent<Animator>();
+        //m_animator = GetComponent<Animator>();
+        Small_Renderer.enabled = true;
+        Big_Renderer.enabled = false;
+        m_collider = GetComponent<CapsuleCollider2D>();
     }
 
     private void Update()
@@ -92,5 +101,22 @@ public class PlayerMovement : MonoBehaviour
         //reload the current scence using scenemanager
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Grow()
+    {
+        Big_Renderer.enabled = true;
+        Small_Renderer.enabled = false;
+        m_animator = big_Animator;
+        m_collider.offset = new Vector2(0f, 0.5f);
+        m_collider.size = new Vector2(0.875f, 2f);
+    }
+    public void Shrink()
+    {
+        Big_Renderer.enabled = false;
+        Small_Renderer.enabled = true;
+        m_animator = small_Animator;
+        m_collider.offset = new Vector2(0f, 0f);
+        m_collider.size = new Vector2(0.875f, 1f);
     }
 }
