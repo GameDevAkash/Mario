@@ -26,6 +26,7 @@ public class PowerUp : MonoBehaviour
             
             case Type.magicMushroom:
                 Player.GetComponent<PlayerMovement>().Grow();
+                Destroy(this.gameObject);
                 break;
 
             case Type.starMan:
