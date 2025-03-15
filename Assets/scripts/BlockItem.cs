@@ -14,11 +14,13 @@ public class BlockItem : MonoBehaviour
         CircleCollider2D physicsCollider = GetComponent<CircleCollider2D>();
         BoxCollider2D triggerCollider = GetComponent<BoxCollider2D>();
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        PowerupMovement powerupMovement = GetComponent<PowerupMovement>();
 
         rigidbody.isKinematic = true;
         physicsCollider.enabled = false;
         triggerCollider.enabled = false;
         spriteRenderer.enabled = false;
+        powerupMovement.enabled = false;
 
         yield return new WaitForSeconds(0.25f);
 
@@ -43,6 +45,7 @@ public class BlockItem : MonoBehaviour
         rigidbody.isKinematic = false;
         physicsCollider.enabled = true;
         triggerCollider.enabled = true;
+        powerupMovement.enabled = true;
     }
 
 }
