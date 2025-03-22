@@ -17,6 +17,7 @@ public class PlayfabManager : MonoBehaviour
     public Transform leaderboardContainer;
     public GameObject leaderboardEntryPrefab;
     public GameObject leaderboardPanel, Loginpanel, registerPanel;
+    public string PlayerID = string.Empty;
 
     private void Awake()
     {
@@ -28,7 +29,7 @@ public class PlayfabManager : MonoBehaviour
 
     void Start()
     {
-        //CustomIDLogin();
+        CustomIDLogin();
         //settings.TitleId = tittleID;
     }
 
@@ -55,6 +56,7 @@ public class PlayfabManager : MonoBehaviour
         MessageText.text = "Player logged in sucessfully";
         Loginpanel.SetActive(false);    
         UIHandler.Instance.MainMenuPanel.SetActive(true);
+        PlayerID = result.PlayFabId;
     }
 
     public void RegisterViaMail()
@@ -156,6 +158,11 @@ public class PlayfabManager : MonoBehaviour
                 texts[0].text = (item.Position + 1).ToString();
                 texts[1].text = item.PlayFabId;
                 texts[2].text = item.StatValue.ToString();
+
+                if(item.PlayFabId == PlayerID)
+                {
+                    entry.GetComponent<Image>().color = Color.red;
+                }
             }
 
             UIHandler.Instance.MainMenuPanel.SetActive(false);
@@ -182,6 +189,7 @@ public class PlayfabManager : MonoBehaviour
 
         foreach (var item in result.Leaderboard)
         {
+            Debug.Log(item);
             // Instantiate the prefab
             GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
 
@@ -192,6 +200,14 @@ public class PlayfabManager : MonoBehaviour
             texts[0].text = "Rank: " + (item.Position + 1);
             texts[1].text = "ID: " + item.PlayFabId;
             texts[2].text = "Score: " + item.StatValue;
+
+            if (item.PlayFabId == PlayerID)
+            {
+                entry.GetComponent<Image>().color = Color.red;
+            }
+
+            UIHandler.Instance.MainMenuPanel.SetActive(false);
+            leaderboardPanel.SetActive(true);
         }
     }
 }
