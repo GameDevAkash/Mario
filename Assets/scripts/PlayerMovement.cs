@@ -91,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
         if(collision.gameObject.tag == "castle")
         {
             //Move to next level
+            PlayfabManager.instance.SendLeaderboard(GetComponent<CoinWallet>().CoinsCount);
             UIHandler.Instance.WinPanel.gameObject.SetActive(true);
             this.enabled = false;
         }
@@ -100,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //reload the current scence using scenemanager
 
+        PlayfabManager.instance.SendLeaderboard(GetComponent<CoinWallet>().CoinsCount);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

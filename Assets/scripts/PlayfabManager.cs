@@ -9,11 +9,14 @@ using System;
 
 public class PlayfabManager : MonoBehaviour
 {
-    private static PlayfabManager instance;
+    public static PlayfabManager instance;
     public TMP_InputField email_register, email_Login,email_passowrdRecovery, password_register, password_login;
     public TextMeshProUGUI MessageText;
     private static string tittleID = "4117F";
     public PlayFabSharedSettings settings;
+    public Transform leaderboardContainer;
+    public GameObject leaderboardEntryPrefab;
+    public GameObject leaderboardPanel, Loginpanel, registerPanel;
 
     private void Awake()
     {
@@ -26,7 +29,7 @@ public class PlayfabManager : MonoBehaviour
     void Start()
     {
         //CustomIDLogin();
-        settings.TitleId = tittleID;
+        //settings.TitleId = tittleID;
     }
 
     public void CustomIDLogin()
@@ -50,6 +53,8 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("LoginSuccessfull");
         MessageText.text = "Player logged in sucessfully";
+        Loginpanel.SetActive(false);    
+        UIHandler.Instance.MainMenuPanel.SetActive(true);
     }
 
     public void RegisterViaMail()
@@ -71,6 +76,8 @@ public class PlayfabManager : MonoBehaviour
     private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
         MessageText.text = "Player Registered Successfully";
+        registerPanel.SetActive(false);
+        UIHandler.Instance.MainMenuPanel.SetActive(true);
     }
 
     public void LoginViaMail()
@@ -97,4 +104,96 @@ public class PlayfabManager : MonoBehaviour
     {
         MessageText.text = "Email Sent";
     }
+
+    public void SendLeaderboard(int score) 
+    {
+        var request = new UpdatePlayerStatisticsRequest 
+        {
+            Statistics = new List<StatisticUpdate> 
+            {
+                new StatisticUpdate 
+                {
+                    StatisticName = "CoinsCollected",
+                    Value = score
+                }
+            }
+        };
+        PlayFabClientAPI.UpdatePlayerStatistics(request, OnLeaderboardUpdate, OnError);
+    }
+
+    void OnLeaderboardUpdate(UpdatePlayerStatisticsResult result)
+    {
+        Debug.Log("Successful leaderboard sent");
+    }
+
+    public void GetLeaderboard() {
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = "CoinsCollected",
+            StartPosition = 0,
+            MaxResultsCount = 10
+        };
+        PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardGet, OnError);
+    }
+
+    void OnLeaderboardGet(GetLeaderboardResult result)
+    {
+            // Clear previous entries
+            foreach (Transform child in leaderboardContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (var item in result.Leaderboard)
+            {
+                // Instantiate the prefab
+                GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
+
+                // Get TextMeshProUGUI components
+                TextMeshProUGUI[] texts = entry.GetComponentsInChildren<TextMeshProUGUI>();
+
+                // Assign values
+                texts[0].text = (item.Position + 1).ToString();
+                texts[1].text = item.PlayFabId;
+                texts[2].text = item.StatValue.ToString();
+            }
+
+            UIHandler.Instance.MainMenuPanel.SetActive(false);
+            leaderboardPanel.SetActive(true);
+    }
+
+    public void GetLeaderboardAroundPlayer()
+    {
+        var request = new GetLeaderboardAroundPlayerRequest
+        {
+            StatisticName = "CoinsCollected",
+            MaxResultsCount = 10
+        };
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(request, OnLeaderboardGetAroundPlayer, OnError);
+    }
+
+    private void OnLeaderboardGetAroundPlayer(GetLeaderboardAroundPlayerResult result)
+    {
+        // Clear previous entries
+        foreach (Transform child in leaderboardContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var item in result.Leaderboard)
+        {
+            // Instantiate the prefab
+            GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
+
+            // Get TextMeshProUGUI components
+            TextMeshProUGUI[] texts = entry.GetComponentsInChildren<TextMeshProUGUI>();
+
+            // Assign values
+            texts[0].text = "Rank: " + (item.Position + 1);
+            texts[1].text = "ID: " + item.PlayFabId;
+            texts[2].text = "Score: " + item.StatValue;
+        }
+    }
 }
+
+
