@@ -143,7 +143,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RewindImage_0: -5951495555178010374
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

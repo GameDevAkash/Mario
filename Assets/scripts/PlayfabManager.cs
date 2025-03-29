@@ -6,6 +6,8 @@ using PlayFab.ClientModels;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using Facebook.Unity;
+using PlayFab.PfEditor.EditorModels;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -29,8 +31,12 @@ public class PlayfabManager : MonoBehaviour
 
     void Start()
     {
-        CustomIDLogin();
+        //CustomIDLogin();
         //settings.TitleId = tittleID;
+
+        if (FB.IsInitialized)
+            return;
+        FB.Init(() => FB.ActivateApp());
     }
 
     public void CustomIDLogin()
@@ -44,13 +50,13 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.LoginWithCustomID(request, OnSucessLogin, OnError);
     }
 
-    private void OnError(PlayFabError error)
+    private void OnError(PlayFab.PlayFabError error)
     {
         Debug.Log(error.ToString());
         MessageText.text = error.ErrorMessage;
     }
 
-    private void OnSucessLogin(LoginResult result)
+    private void OnSucessLogin(PlayFab.ClientModels.LoginResult result)
     {
         Debug.Log("LoginSuccessfull");
         MessageText.text = "Player logged in sucessfully";
@@ -246,6 +252,35 @@ public class PlayfabManager : MonoBehaviour
     private void OnDataSend(UpdateUserDataResult result)
     {
         Debug.Log("data sent succesfully");
+    }
+
+    public void LoginWithFacebook()
+    {
+        FB.LogInWithReadPermissions(new List<string> { "public_profile", "email" }, result =>
+        {
+            if (FB.IsLoggedIn)
+            {
+                var accessToken = AccessToken.CurrentAccessToken.TokenString;
+                Debug.Log("Facebook Login Successful! Token: " + accessToken);
+                LoginWithPlayfabFacebook(accessToken);
+            }
+            else
+            {
+                Debug.Log("Facebook Login Failed!");
+            }
+        });
+    }
+    public void LoginWithPlayfabFacebook(string accessToken)
+    {
+
+        var request = new LoginWithFacebookRequest
+        {
+            TitleId = tittleID,
+            AccessToken = accessToken,
+            CreateAccount = true
+        };
+
+        PlayFabClientAPI.LoginWithFacebook(request, OnSucessLogin, OnError);
     }
 }
 
