@@ -210,6 +210,43 @@ public class PlayfabManager : MonoBehaviour
             leaderboardPanel.SetActive(true);
         }
     }
+
+    // Player data
+    public void GetAppearance()
+    {
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest(), OnDataRecieved, OnError);
+    }
+
+    void OnDataRecieved(GetUserDataResult result)
+    {
+        Debug.Log("Recieved user data!");
+        if (result.Data != null && result.Data.ContainsKey("Hat") && result.Data.ContainsKey("Skin") && result.Data.ContainsKey("Beard"))
+        {
+            //characterEditor.SetAppearance(result.Data["Hat"].Value, result.Data["Skin"].Value, result.Data["Beard"].Value);
+        }
+        else
+        {
+            Debug.Log("Player data not complete!");
+        }
+    }
+
+    public void SaveAppearance()
+    {
+        var request = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string> {
+            //{"Hat", characterEditor.Hat},
+            //{"Skin", characterEditor.Skin},
+            //{"Beard", characterEditor.Beard}
+        }
+        };
+        PlayFabClientAPI.UpdateUserData(request, OnDataSend, OnError);
+    }
+
+    private void OnDataSend(UpdateUserDataResult result)
+    {
+        Debug.Log("data sent succesfully");
+    }
 }
 
 

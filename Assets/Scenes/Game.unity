@@ -2251,7 +2251,7 @@ GameObject:
   - component: {fileID: 386615641}
   - component: {fileID: 386615640}
   m_Layer: 5
-  m_Name: GetLeaderboardButton (1)
+  m_Name: GetLeaderboardAroundPlayerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
