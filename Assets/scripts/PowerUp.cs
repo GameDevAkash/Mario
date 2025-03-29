@@ -30,6 +30,8 @@ public class PowerUp : MonoBehaviour
                 break;
 
             case Type.starMan:
+                Player.GetComponent<PlayerMovement>().Starpower();
+                Destroy(this.gameObject);
                 break;
         }
     }

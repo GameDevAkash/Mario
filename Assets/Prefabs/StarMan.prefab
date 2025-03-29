@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 8277044575485404634}
   - component: {fileID: 2058722955200473143}
   - component: {fileID: 1570205346376749027}
+  - component: {fileID: 6388320247824270836}
+  - component: {fileID: 8388283109671418446}
   m_Layer: 0
   m_Name: StarMan
   m_TagString: Untagged
@@ -212,3 +214,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6388320247824270836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109743104132572534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc4ce5075b69f8478e82dd127ed8b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  direction: {x: -1, y: 0}
+--- !u!114 &8388283109671418446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109743104132572534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce323c44bed4d64b896d438fc80a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

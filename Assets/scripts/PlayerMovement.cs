@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController2D))]
 public class PlayerMovement : MonoBehaviour
@@ -17,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool Big => Big_Renderer.enabled;
     public bool Small => Small_Renderer.enabled;
+
+    bool starpower;
 
     private void Awake()
     {
@@ -120,5 +123,34 @@ public class PlayerMovement : MonoBehaviour
         m_animator = small_Animator;
         m_collider.offset = new Vector2(0f, 0f);
         m_collider.size = new Vector2(0.875f, 1f);
+    }
+
+    public void Starpower(float duration = 10f)
+    {
+        StartCoroutine(StarpowerAnimation(duration));
+    }
+
+    private IEnumerator StarpowerAnimation(float duration)
+    {
+        starpower = true;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            if (Time.frameCount % 4 == 0)
+            {
+                Big_Renderer.color = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f);
+                Small_Renderer.color = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f);
+            }
+
+            yield return null;
+        }
+
+        Big_Renderer.color = Color.white;
+        Small_Renderer.color = Color.white;
+        starpower = false;
     }
 }
