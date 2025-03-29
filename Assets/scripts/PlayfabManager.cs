@@ -31,7 +31,7 @@ public class PlayfabManager : MonoBehaviour
 
     void Start()
     {
-        //CustomIDLogin();
+        CustomIDLogin();
         //settings.TitleId = tittleID;
 
         if (FB.IsInitialized)

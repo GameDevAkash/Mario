@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     public bool Big => Big_Renderer.enabled;
     public bool Small => Small_Renderer.enabled;
 
+    public AudioSource m_audioSource;
+    public MarioSoundManager MarioSoundManager;
+
     bool starpower;
 
     private void Awake()
@@ -28,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
         Small_Renderer.enabled = true;
         Big_Renderer.enabled = false;
         m_collider = GetComponent<CapsuleCollider2D>();
+        m_audioSource = GetComponent<AudioSource>();
+        MarioSoundManager = GetComponent<MarioSoundManager>();
     }
 
     private void Update()
@@ -40,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         {           
             jump = true; 
             m_animator.SetBool("Jump",jump);
+            PlaySound(MarioSoundManager.MarioJump);
         }
 
         if(transform.position.y < -10)
@@ -70,13 +76,13 @@ public class PlayerMovement : MonoBehaviour
         if(collision.collider.tag == "EnemyHead")
         {
             //Kill the enemy
+            PlaySound(MarioSoundManager.Mario_Kill);
             Destroy(collision.gameObject);
         }
 
         else if(collision.collider.tag == "EnemyBody")
         {
             //Kill the player
-            gameObject.SetActive(false);
             MarioDie();
         }
     }
@@ -105,11 +111,30 @@ public class PlayerMovement : MonoBehaviour
         //reload the current scence using scenemanager
 
         PlayfabManager.instance.SendLeaderboard(GetComponent<CoinWallet>().CoinsCount);
+        //PlaySound(MarioSoundManager.Mario_Die);
+
+        Big_Renderer.enabled = false;
+        Small_Renderer.enabled = false;
+        StartCoroutine(LoadScene());
+    }
+
+    IEnumerator LoadScene()
+    {
+        float elapsed = 0f;
+        float duration = 2f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void Grow()
     {
+        PlaySound(MarioSoundManager.Mario_PowerUp);
         Big_Renderer.enabled = true;
         Small_Renderer.enabled = false;
         m_animator = big_Animator;
@@ -127,6 +152,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Starpower(float duration = 10f)
     {
+
+        PlaySound(MarioSoundManager.Mario_PowerUp);
         StartCoroutine(StarpowerAnimation(duration));
     }
 
@@ -152,5 +179,11 @@ public class PlayerMovement : MonoBehaviour
         Big_Renderer.color = Color.white;
         Small_Renderer.color = Color.white;
         starpower = false;
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        m_audioSource.clip = clip;
+        m_audioSource.Play();
     }
 }
