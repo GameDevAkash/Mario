@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(CharacterController2D))]
 public class PlayerMovement : MonoBehaviour
@@ -80,10 +81,15 @@ public class PlayerMovement : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        else if(collision.collider.tag == "EnemyBody")
+        else if(collision.collider.tag == "EnemyBody" && !starpower)
         {
             //Kill the player
             MarioDie();
+        }
+        else if(collision.collider.tag == "EnemyBody" && starpower)
+        {
+            PlaySound(MarioSoundManager.Mario_Kill);
+            Destroy(collision.gameObject);
         }
     }
 
@@ -95,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<CoinWallet>().CoinsCount += 1;
             UIHandler.Instance.CoinsCount_Text.text = GetComponent<CoinWallet>().CoinsCount.ToString();
             collision.gameObject.SetActive(false);
+            SoundManager.instance.MarioCollectionSound.clip = SoundManager.instance._coin;
+            SoundManager.instance.MarioCollectionSound.Play();
         }
 
         if(collision.gameObject.tag == "castle")
@@ -102,6 +110,8 @@ public class PlayerMovement : MonoBehaviour
             //Move to next level
             PlayfabManager.instance.SendLeaderboard(GetComponent<CoinWallet>().CoinsCount);
             UIHandler.Instance.WinPanel.gameObject.SetActive(true);
+            BackgroundSoundManager.instance.MarioCollectionSound.clip = BackgroundSoundManager.instance.Mario_Win;
+            BackgroundSoundManager.instance.MarioCollectionSound.Play();
             this.enabled = false;
         }
     }
@@ -113,6 +123,9 @@ public class PlayerMovement : MonoBehaviour
         PlayfabManager.instance.SendLeaderboard(GetComponent<CoinWallet>().CoinsCount);
         //PlaySound(MarioSoundManager.Mario_Die);
 
+        BackgroundSoundManager.instance.MarioCollectionSound.clip = BackgroundSoundManager.instance.Mario_Die;
+        BackgroundSoundManager.instance.MarioCollectionSound.Play();
+
         Big_Renderer.enabled = false;
         Small_Renderer.enabled = false;
         StartCoroutine(LoadScene());
@@ -121,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator LoadScene()
     {
         float elapsed = 0f;
-        float duration = 2f;
+        float duration = 3f;
 
         while (elapsed < duration)
         {

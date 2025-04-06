@@ -96,6 +96,8 @@ public class BlockHit : MonoBehaviour
             {
                 //Spawn the required item i.e. Mushrooms, Starman, Coins
                 Instantiate(item, transform.position, Quaternion.identity);
+                SoundManager.instance.MarioCollectionSound.clip = SoundManager.instance._mysteryBlock;
+                SoundManager.instance.MarioCollectionSound.Play();
 
             }
         }
