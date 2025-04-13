@@ -79,11 +79,11 @@ public class BlockHit : MonoBehaviour
         if(collision.transform.tag == "Player")
         {
             if (collision.relativeVelocity.y > 0)
-                Hit();
+                Hit(collision.gameObject.GetComponent<CoinWallet>());
         }
     }
 
-    private void Hit()
+    private void Hit(CoinWallet coinWallet)
     {
         MaxHits--;
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -96,6 +96,11 @@ public class BlockHit : MonoBehaviour
             {
                 //Spawn the required item i.e. Mushrooms, Starman, Coins
                 Instantiate(item, transform.position, Quaternion.identity);
+                if(item.GetComponent<BlockCoin>() != null)
+                {
+                    coinWallet.CoinsCount++;
+                    UIHandler.Instance.CoinsCount_Text.text = coinWallet.CoinsCount.ToString();
+                }
                 SoundManager.instance.MarioCollectionSound.clip = SoundManager.instance._mysteryBlock;
                 SoundManager.instance.MarioCollectionSound.Play();
 
