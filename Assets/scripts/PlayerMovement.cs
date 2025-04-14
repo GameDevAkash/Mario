@@ -84,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         else if(collision.collider.tag == "EnemyBody" && !starpower)
         {
             //Kill the player
+            if(Big_Renderer.enabled == true) { Shrink(); return; }
             MarioDie();
         }
         else if(collision.collider.tag == "EnemyBody" && starpower)
@@ -161,7 +162,9 @@ public class PlayerMovement : MonoBehaviour
         m_animator = small_Animator;
         m_collider.offset = new Vector2(0f, 0f);
         m_collider.size = new Vector2(0.875f, 1f);
+        Starpower(1f);
     }
+
 
     public void Starpower(float duration = 10f)
     {

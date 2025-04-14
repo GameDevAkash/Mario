@@ -18,7 +18,7 @@ public class PlayfabManager : MonoBehaviour
     public PlayFabSharedSettings settings;
     public Transform leaderboardContainer;
     public GameObject leaderboardEntryPrefab;
-    public GameObject leaderboardPanel, Loginpanel, registerPanel;
+    public GameObject leaderboardPanel, Loginpanel, registerPanel, MessageTextParent;
     public string PlayerID = string.Empty;
 
     private void Awake()
@@ -53,12 +53,14 @@ public class PlayfabManager : MonoBehaviour
     private void OnError(PlayFab.PlayFabError error)
     {
         Debug.Log(error.ToString());
+        StartCoroutine(ShowMessageText());
         MessageText.text = error.ErrorMessage;
     }
 
     private void OnSucessLogin(PlayFab.ClientModels.LoginResult result)
     {
         Debug.Log("LoginSuccessfull");
+        StartCoroutine(ShowMessageText());
         MessageText.text = "Player logged in sucessfully";
         Loginpanel.SetActive(false);    
         UIHandler.Instance.MainMenuPanel.SetActive(true);
@@ -69,6 +71,7 @@ public class PlayfabManager : MonoBehaviour
     {
         if (password_register.text.Length < 6)
         {
+            StartCoroutine(ShowMessageText());
             MessageText.text = "Password too short";
         }
 
@@ -83,6 +86,7 @@ public class PlayfabManager : MonoBehaviour
 
     private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
+        StartCoroutine(ShowMessageText());
         MessageText.text = "Player Registered Successfully";
         registerPanel.SetActive(false);
         UIHandler.Instance.MainMenuPanel.SetActive(true);
@@ -110,6 +114,7 @@ public class PlayfabManager : MonoBehaviour
 
     private void OnResetPasswordSuccess(SendAccountRecoveryEmailResult result)
     {
+        StartCoroutine(ShowMessageText());
         MessageText.text = "Email Sent";
     }
 
@@ -281,6 +286,19 @@ public class PlayfabManager : MonoBehaviour
         };
 
         PlayFabClientAPI.LoginWithFacebook(request, OnSucessLogin, OnError);
+    }
+
+    private IEnumerator ShowMessageText(float duration = 3f)
+    {
+        float elapsed = 0f;
+        MessageTextParent.SetActive(true);
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+        MessageTextParent.SetActive(false);
     }
 }
 
